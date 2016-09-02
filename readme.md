@@ -1,3 +1,5 @@
+[![GoDoc](https://godoc.org/github.com/nii236/adjectiveadjectiveanimal?status.svg)](https://godoc.org/github.com/nii236/adjectiveadjectiveanimal)
+
 # Adjective Adjective Animal
 
 This is a port of [this node.js project](https://github.com/a-type/adjective-adjective-animal/).

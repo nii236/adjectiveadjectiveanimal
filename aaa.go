@@ -6,15 +6,28 @@ import (
 	"strings"
 )
 
+// Options are the title available for the AAA generator
+type Options struct {
+	// Title will return the words in title form
+	Title bool
+}
+
 // Generate will generate a friendly token of a numAdj
 // adjectives followed by an animal separated by sep
-func Generate(numAdj int, sep string) string {
+func Generate(numAdj int, options *Options) []string {
 	result := []string{}
 	for i := 0; i < numAdj; i++ {
 		result = append(result, randomAdjective())
 	}
 	result = append(result, randomAnimal())
-	return strings.Join(result, sep)
+	if options.Title {
+		titledResult := []string{}
+		for _, word := range result {
+			titledResult = append(titledResult, strings.Title(word))
+		}
+		return titledResult
+	}
+	return result
 }
 
 func randomAdjective() string {

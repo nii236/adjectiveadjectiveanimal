@@ -22,3 +22,9 @@ func TestGenerate(t *testing.T) {
 		}
 	}
 }
+
+func TestGenerateOneToken(t *testing.T) {
+	token := aaa.Generate(2, "-")
+	t.Log(token)
+
+}

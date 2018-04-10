@@ -46,14 +46,15 @@ func withSeed(numAdj int, options *Options) []string {
 	h.Write(options.Seed)
 	seed := int64(binary.BigEndian.Uint64(h.Sum(nil)))
 
-	mrand.NewSource(seed)
+	src := mrand.NewSource(seed)
+	rnd := mrand.New(src)
 	for i := 0; i < numAdj; i++ {
-		n := mrand.Intn(len(adjectives) - 1)
+		n := rnd.Intn(len(adjectives) - 1)
 		rndAdj := strings.ToLower(adjectives[n])
 		result = append(result, rndAdj)
 	}
 
-	n := mrand.Intn(len(animals) - 1)
+	n := rnd.Intn(len(animals) - 1)
 	rndAni := strings.ToLower(animals[n])
 	result = append(result, rndAni)
 	if options.Title {

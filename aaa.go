@@ -17,6 +17,14 @@ type Options struct {
 	Title bool
 }
 
+// GenerateCombined will generate a friendly token of a numAdj
+// adjectives followed by an animal separated by sep
+func GenerateCombined(numAdj int, seperator string) string {
+	result := Generate(numAdj, &Options{})
+
+	return strings.Join(result, seperator)
+}
+
 // Generate will generate a friendly token of a numAdj
 // adjectives followed by an animal separated by sep
 func Generate(numAdj int, options *Options) []string {

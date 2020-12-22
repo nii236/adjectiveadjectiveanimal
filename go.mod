@@ -1,3 +1,3 @@
-module github.com/nii236/adjectiveadjectiveanimal
+module github.com/comomac/adjectiveadjectiveanimal
 
 go 1.12

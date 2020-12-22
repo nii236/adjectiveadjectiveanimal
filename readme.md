@@ -9,7 +9,7 @@ It will generate a specified number of adjectives, then an animal at the end. Th
 # Installation
 
 ```bash
-$ go get -u github.com/nii236/adjectiveadjectiveanimal
+$ go get -u github.com/nii236/adjectiveadjectiveanimal/cmd/aaa
 ```
 
 # Example Usage
@@ -30,7 +30,7 @@ func main() {
 ```
 
 ```
-$ go run main.go
+$ aaa
 unprotected-ultramicroscopic-foolproof-millipede
 ```
 

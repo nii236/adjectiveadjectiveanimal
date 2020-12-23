@@ -3,62 +3,60 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
-	"net/http"
-	"os"
+	"math/rand"
 	"strconv"
 	"strings"
+	"time"
 
 	aaa "github.com/nii236/adjectiveadjectiveanimal"
 )
 
-var port int
-var server bool
-
-func init() {
-	flag.IntVar(&port, "port", 8080, "what port to serve on")
-	flag.BoolVar(&server, "server", false, "run server")
-}
-
 func main() {
+	// unique seed
+	rand.Seed(time.Now().Local().UnixNano())
+
+	var adjectiveAmount int
+	var isRandomUpperCase bool
+	var isRandomNumber bool
+
+	flag.IntVar(&adjectiveAmount, "len", 2, "how many adjective")
+	flag.BoolVar(&isRandomUpperCase, "up", false, "random upper case")
+	flag.BoolVar(&isRandomNumber, "num", false, "random number (replace)")
 	flag.Parse()
-	if server {
-		serve()
+
+	if adjectiveAmount < 2 {
+		fmt.Println("need at least 2 adjective")
 		return
 	}
-	args := os.Args[1:]
-	i := 2
-	if len(args) > 0 {
-		var err error
-		i, err = strconv.Atoi(args[0])
-		if err != nil {
-			fmt.Println("Non number supplied for adjective amount. Exiting.")
-			os.Exit(-1)
+
+	// generate words first
+	result := strings.Join(aaa.Generate(adjectiveAmount, &aaa.Options{}), "-")
+
+	// randomise upper case
+	if isRandomUpperCase {
+		dat := []rune(result)
+		for i := 0; i < 3; i++ {
+			r := rand.Intn(len(result))
+			x := string(dat[r])
+			dat[r] = []rune(strings.ToUpper(x))[0]
 		}
+		result = string(dat)
 	}
-	result := strings.Join(aaa.Generate(i, &aaa.Options{}), "-")
+
+	// randomise number
+	if isRandomNumber {
+		dat := []rune(result)
+		for i := 0; i < 2; i++ {
+			r := rand.Intn(len(result))
+			if dat[r] == rune('-') {
+				continue
+			}
+			n := rand.Intn(10)
+			// fmt.Println(i, n)
+			dat[r] = []rune(strconv.Itoa(n))[0]
+		}
+		result = string(dat)
+	}
+
 	fmt.Println(result)
-}
-
-func serve() {
-	m := http.NewServeMux()
-	m.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		sep := r.URL.Query().Get("sep")
-
-		if sep == "" {
-			sep = "-"
-		}
-		numStr := r.URL.Query().Get("num")
-		num, err := strconv.Atoi(numStr)
-		if err != nil {
-			num = 2
-		}
-		words := aaa.Generate(num, &aaa.Options{})
-
-		w.Write([]byte(strings.Join(words, sep)))
-	})
-
-	portNum := strconv.Itoa(port)
-	log.Println("Run server on:", portNum)
-	log.Fatalln(http.ListenAndServe(":"+portNum, m))
 }

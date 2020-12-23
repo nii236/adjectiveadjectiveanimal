@@ -6,32 +6,30 @@ This is a port of [this node.js project](https://github.com/a-type/adjective-adj
 
 It will generate a specified number of adjectives, then an animal at the end. The words are separated by a character of your choice.
 
-# Installation
+## Installation
 
 ```bash
-$ go get -u github.com/nii236/adjectiveadjectiveanimal
+$ go get -u github.com/nii236/adjectiveadjectiveanimal/cmd/aaa
 ```
 
-# Example Usage
+## Usage
 
-```
-package main
-
-import (
-	"fmt"
-
-	aaa "github.com/nii236/adjectiveadjectiveanimal"
-)
-
-func main() {
-	result := aaa.Generate(3, "-")
-	fmt.Println(result)
-}
-```
-
-```
-$ go run main.go
+```bash
+$ aaa
 unprotected-ultramicroscopic-foolproof-millipede
+```
+
+## Options
+
+```bash
+$ aaa -h
+Usage of aaa:
+  -len int
+        how many adjective (default 2)
+  -num
+        random number (replace)
+  -up
+        random upper case
 ```
 
 ## Contributing

@@ -15,25 +15,25 @@ func main() {
 	// unique seed
 	rand.Seed(time.Now().Local().UnixNano())
 
-	var alen int
-	var rUp bool
-	var rNum bool
+	var adjectiveAmount int
+	var isRandomUpperCase bool
+	var isRandomNumber bool
 
-	flag.IntVar(&alen, "len", 2, "how many adjective")
-	flag.BoolVar(&rUp, "up", false, "random upper case")
-	flag.BoolVar(&rNum, "num", false, "random number (replace)")
+	flag.IntVar(&adjectiveAmount, "len", 2, "how many adjective")
+	flag.BoolVar(&isRandomUpperCase, "up", false, "random upper case")
+	flag.BoolVar(&isRandomNumber, "num", false, "random number (replace)")
 	flag.Parse()
 
-	if alen < 2 {
+	if adjectiveAmount < 2 {
 		fmt.Println("need at least 2 adjective")
 		return
 	}
 
 	// generate words first
-	result := strings.Join(aaa.Generate(alen, &aaa.Options{}), "-")
+	result := strings.Join(aaa.Generate(adjectiveAmount, &aaa.Options{}), "-")
 
 	// randomise upper case
-	if rUp {
+	if isRandomUpperCase {
 		dat := []rune(result)
 		for i := 0; i < 3; i++ {
 			r := rand.Intn(len(result))
@@ -44,7 +44,7 @@ func main() {
 	}
 
 	// randomise number
-	if rNum {
+	if isRandomNumber {
 		dat := []rune(result)
 		for i := 0; i < 2; i++ {
 			r := rand.Intn(len(result))

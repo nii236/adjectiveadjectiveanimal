@@ -18,10 +18,12 @@ func main() {
 	var adjectiveAmount int
 	var isRandomUpperCase bool
 	var isRandomNumber bool
+	var isAlliterate bool
 
 	flag.IntVar(&adjectiveAmount, "len", 2, "how many adjective")
 	flag.BoolVar(&isRandomUpperCase, "up", false, "random upper case")
 	flag.BoolVar(&isRandomNumber, "num", false, "random number (replace)")
+	flag.BoolVar(&isAlliterate, "alliterate", false, "repeat first letter for each word")
 	flag.Parse()
 
 	if adjectiveAmount < 2 {
@@ -30,7 +32,7 @@ func main() {
 	}
 
 	// generate words first
-	result := strings.Join(aaa.Generate(adjectiveAmount, &aaa.Options{}), "-")
+	result := strings.Join(aaa.Generate(adjectiveAmount, &aaa.Options{Alliterate: isAlliterate}), "-")
 
 	// randomise upper case
 	if isRandomUpperCase {

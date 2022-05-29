@@ -11,8 +11,9 @@ import (
 
 // Options are the title available for the AAA generator
 type Options struct {
-	UseSeed bool
-	Seed    []byte
+	Alliterate bool
+	UseSeed    bool
+	Seed       []byte
 	// Title will return the words in title form
 	Title bool
 }
@@ -34,9 +35,24 @@ func Generate(numAdj int, options *Options) []string {
 
 	result := []string{}
 	for i := 0; i < numAdj; i++ {
-		result = append(result, randomAdjective())
+		adj := randomAdjective()
+		if options.Alliterate {
+			for i > 0 && adj[0] != result[0][0] {
+				adj = randomAdjective()
+			}
+		}
+
+		result = append(result, adj)
 	}
-	result = append(result, randomAnimal())
+	animal := randomAnimal()
+	if options.Alliterate {
+		for animal[0] != result[0][0] {
+			animal = randomAnimal()
+		}
+	}
+
+	result = append(result, animal)
+
 	if options.Title {
 		titledResult := []string{}
 		for _, word := range result {

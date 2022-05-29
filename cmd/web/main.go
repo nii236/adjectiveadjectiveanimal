@@ -43,6 +43,8 @@ func main() {
 func serve() {
 	m := http.NewServeMux()
 	m.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		alliterate := strings.ToLower(r.URL.Query().Get("alliterate")) == "true"
+
 		sep := r.URL.Query().Get("sep")
 
 		if sep == "" {
@@ -53,7 +55,7 @@ func serve() {
 		if err != nil {
 			num = 2
 		}
-		words := aaa.Generate(num, &aaa.Options{})
+		words := aaa.Generate(num, &aaa.Options{Alliterate: alliterate})
 
 		w.Write([]byte(strings.Join(words, sep)))
 	})

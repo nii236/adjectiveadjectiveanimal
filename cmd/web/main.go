@@ -1,46 +1,33 @@
 package main
 
 import (
-	"flag"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
 
 	aaa "github.com/nii236/adjectiveadjectiveanimal"
+	"github.com/rs/zerolog/log"
+	"github.com/urfave/cli/v2"
 )
 
-var port int
-var server bool
-
-func init() {
-	flag.IntVar(&port, "port", 8080, "what port to serve on")
-	flag.BoolVar(&server, "server", false, "run server")
-}
-
 func main() {
-	flag.Parse()
-	if server {
-		serve()
-		return
+	app := &cli.App{
+		Name:  "serve",
+		Usage: "run aaa server",
+		Flags: []cli.Flag{
+			&cli.IntFlag{Name: "port", Value: 8080, EnvVars: []string{"PORT"}, Usage: "Which port to run the server on"},
+		},
+		Action: Serve,
 	}
-	args := os.Args[1:]
-	i := 2
-	if len(args) > 0 {
-		var err error
-		i, err = strconv.Atoi(args[0])
-		if err != nil {
-			fmt.Println("Non number supplied for adjective amount. Exiting.")
-			os.Exit(-1)
-		}
+
+	if err := app.Run(os.Args); err != nil {
+		log.Err(err).Msg("cli error")
 	}
-	result := strings.Join(aaa.Generate(i, &aaa.Options{}), "-")
-	fmt.Println(result)
 }
 
-func serve() {
+func Serve(c *cli.Context) error {
 	m := http.NewServeMux()
 	m.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		alliterate := strings.ToLower(r.URL.Query().Get("alliterate")) == "true"
@@ -60,7 +47,7 @@ func serve() {
 		w.Write([]byte(strings.Join(words, sep)))
 	})
 
-	portNum := strconv.Itoa(port)
-	log.Println("Run server on:", portNum)
-	log.Fatalln(http.ListenAndServe(":"+portNum, m))
+	portNum := c.Int("port")
+	log.Info().Int("port", portNum).Msg("run server")
+	return http.ListenAndServe(fmt.Sprintf(":%d", portNum), m)
 }
